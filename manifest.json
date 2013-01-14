@@ -4,7 +4,7 @@
     "manifest_version": 2,
     "description": "",
     "permissions": [
-        "http://*/"
+        "<all_urls>"
     ],
     "browser_action": {
         "default_title": "Chrome Link Preview - Demo"

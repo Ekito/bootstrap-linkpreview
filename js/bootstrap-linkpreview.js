@@ -46,26 +46,30 @@
             });
 
             // parse data to jQuery DOM object
-            var parser = new DOMParser(),
-                dom = parser.parseFromString(data, "text/xml"),
-                $dom = $(dom);
+            var dom = document.implementation.createHTMLDocument('');
+            dom.body.innerHTML = data;
+            var $dom = $(dom);
             
             // get components
             var title = this.findTitleInDom($dom),
-                description = this.findDescriptionInDom($dom);
+                description = this.findDescriptionInDom($dom),
+                image = this.findImageInDom($dom);
 
             // build dom elements
             var $title = $("<h4></h4>").text(title),
-                $description = $("<p></p>").text(description);
+                $description = $("<p></p>").text(description),
+                $image = $("<img></img>").attr("src", image);
 
             // append information
             if (this.$previewContainer.length) {
                 this.$previewContainer
                     .append($title)
-                    .append($description);
+                    .append($description)
+                    .append($image);
             } else {
                 $title.insertAfter(this.$element);
                 $description.insertAfter($title);
+                $image.insertAfter($description);
             }
         },
 
@@ -80,7 +84,46 @@
         },
 
         findDescriptionInDom: function($dom) {
-            return  $dom.find("meta[name=description]").attr("content");
+            return $dom.find("meta[name=description]").attr("content");
+        },
+
+        findImageInDom: function($dom) {
+            var imageSrc = $dom.find("meta[itemprop=image]").attr("content") ||
+                $dom.find("link[rel=image_src]").attr("content") ||
+                $dom.find("meta[itemprop=image]").attr("content") ||
+                this.findFirstImageInBody($dom.find("body"));
+
+            // maybe the returned url is relative
+            if (imageSrc && !this.validateUrl(imageSrc)) {
+
+                var a = document.createElement("a");
+                a.href = this.url
+
+                imageSrc = a.protocol + "//" + a.hostname + imageSrc;
+            }
+
+            return imageSrc;
+        },
+
+        findFirstImageInBody: function($body) {
+            var result;
+
+            var $images = $body.find("img[src]");
+
+            var $img;
+            $images.each(function() {
+                $img = $(this);
+                if ($img.attr("height") && $img.attr("width")) {
+                    result = this.src;
+                    return false;
+                }
+            });
+
+            return result;
+        },
+
+        validateUrl: function(value) {
+            return (/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i).test(value);
         }
     };
 
