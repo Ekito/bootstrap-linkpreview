@@ -2,12 +2,13 @@
     
     var LinkPreview = function(element, options) {
 
-        if (options === null || options.url === null) {
-            return;
-        }
-
         this.$element = $(element);
-        this.$previewContainer = $(options.previewContainer);
+        
+        if (options && options.previewContainer) {
+            this.$previewContainer = $(options.previewContainer);
+        } else {
+            this.$previewContainer = this.$element.parent();
+        }
 
         this.url = options.url;
 
@@ -61,16 +62,10 @@
                 $image = $("<img></img>").attr("src", image);
 
             // append information
-            if (this.$previewContainer.length) {
-                this.$previewContainer
-                    .append($title)
-                    .append($description)
-                    .append($image);
-            } else {
-                $title.insertAfter(this.$element);
-                $description.insertAfter($title);
-                $image.insertAfter($description);
-            }
+            this.$previewContainer
+                .append($title)
+                .append($description)
+                .append($image);
         },
 
         renderError: function(data) {
