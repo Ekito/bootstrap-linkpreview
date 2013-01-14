@@ -37,7 +37,7 @@
             data = data.replace(/<\/?[A-Z]+.*?>/g, function (m) { 
                 return m.toLowerCase(); 
             });
-            
+
             // parse data to jQuery DOM object
             var parser = new DOMParser(),
                 dom = parser.parseFromString(data, "text/xml"),
@@ -48,7 +48,7 @@
                 description = this.findDescriptionInDom($dom);
 
             // build dom elements
-            var $title = $("<p></p>").addClass("lead").text(title),
+            var $title = $("<h4></h4>").text(title),
                 $description = $("<p></p>").text(description);
 
             // append information
