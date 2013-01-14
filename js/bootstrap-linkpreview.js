@@ -7,6 +7,8 @@
         }
 
         this.$element = $(element);
+        this.$previewContainer = $(options.previewContainer);
+
         this.url = options.url;
 
         this.init();
@@ -14,6 +16,11 @@
     
     LinkPreview.prototype = {
         constructor: LinkPreview,
+
+        url: null,
+
+        $element: null,
+        $previewContainer: null,
 
         init: function() {
             this.getSource(this.url, this.renderPreview, this.renderError);
@@ -34,8 +41,8 @@
             console.log(data);
             
             // html to lower case
-            data = data.replace(/<\/?[A-Z]+.*?>/g, function (m) { 
-                return m.toLowerCase(); 
+            data = data.replace(/<\/?[A-Z]+[\w\W]*?>/g, function (m) {
+                return m.toLowerCase();
             });
 
             // parse data to jQuery DOM object
@@ -52,8 +59,14 @@
                 $description = $("<p></p>").text(description);
 
             // append information
-            $title.insertAfter(this.$element);
-            $description.insertAfter($title);
+            if (this.$previewContainer.length) {
+                this.$previewContainer
+                    .append($title)
+                    .append($description);
+            } else {
+                $title.insertAfter(this.$element);
+                $description.insertAfter($title);
+            }
         },
 
         renderError: function(data) {
