@@ -1,5 +1,5 @@
 $(function() {
     $("a").linkpreview({
-        url: "http://ekito.fr"
+        url: "http://romainpiel.com"
     });
 });

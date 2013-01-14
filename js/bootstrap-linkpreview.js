@@ -6,10 +6,10 @@
             return;
         }
 
-        this.element = $(element);
+        this.$element = $(element);
         this.url = options.url;
 
-        this.init();        
+        this.init();
     };
     
     LinkPreview.prototype = {
@@ -23,19 +23,51 @@
             $.ajax({
                 url: url,
                 type: "GET",
+                context: this,
                 success: onSuccess,
                 error: onError
             });
         },
 
         renderPreview: function(data) {
-            console.log("SUCCESS");
+            //console.log("SUCCESS");
             console.log(data);
+            
+            // html to lower case
+            data = data.replace(/<\/?[A-Z]+.*?>/g, function (m) { 
+                return m.toLowerCase(); 
+            });
+            
+            // parse data to jQuery DOM object
+            var parser = new DOMParser(),
+                dom = parser.parseFromString(data, "text/xml"),
+                $dom = $(dom);
+            
+            // get components
+            var title = this.findTitleInDom($dom),
+                description = this.findDescriptionInDom($dom);
+
+            // build dom elements
+            var $title = $("<p></p>").addClass("lead").text(title),
+                $description = $("<p></p>").text(description);
+
+            // append information
+            $title.insertAfter(this.$element);
+            $description.insertAfter($title);
         },
 
         renderError: function(data) {
             console.log("ERROR");
             console.log(data);
+        },
+
+        findTitleInDom: function($dom) {
+            return $dom.find("title").text() ||
+                $dom.find("meta[name=title]").attr("content");
+        },
+
+        findDescriptionInDom: function($dom) {
+            return  $dom.find("meta[name=description]").attr("content");
         }
     };
 
