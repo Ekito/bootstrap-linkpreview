@@ -176,8 +176,14 @@
 
         renderError: function() {
             var $alert = $("<div></div>")
-                            .addClass("alert alert-error")
-                            .text("We are sorry we couldn't load the preview. The URL is invalid.");
+                            .addClass("alert alert-error");
+
+            if (this.getOption("errorMessage")) {
+                $alert.text(this.options.errorMessage);
+            } else {
+                $alert.text("We are sorry we couldn't load the preview. The URL is invalid.");
+            }
+                            
             this.$previewContainer.append($alert);
 
             if (typeof this.getOption("onError") === "function") {

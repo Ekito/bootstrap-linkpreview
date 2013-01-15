@@ -6,6 +6,7 @@ $(function() {
         previewContainer: "#preview-container2",
         refreshButton: "#refresh-button",
         previewContainerClass: "row-fluid",
+        errorMessage: "Invalid URL",
         preProcess: function() {
             console.log("preProcess");
         },
