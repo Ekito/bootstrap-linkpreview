@@ -6,7 +6,19 @@
  * $("#link").linkpreview({
  *     url: "http://romainpiel.com",            //optional
  *     previewContainer: "#preview-container",  //optional
- *     refreshButton: "#refresh-button"         //optional
+ *     refreshButton: "#refresh-button",        //optional
+ *     preProcess: function() {                 //optional
+ *         console.log("preProcess");
+ *     },
+ *     onSuccess: function() {                  //optional
+ *         console.log("onSuccess");
+ *     },
+ *     onError: function() {                    //optional
+ *         console.log("onError");
+ *     },
+ *     onComplete: function() {                 //optional
+ *         console.log("onComplete");
+ *     }
  * });
  *
  * =========================================================
@@ -56,6 +68,7 @@
     LinkPreview.prototype = {
         constructor: LinkPreview,
 
+        options: null,
         url: null,
 
         $element: null,
@@ -97,19 +110,25 @@
                 return;
             }
 
+            if (this.options.preProcess && typeof this.options.preProcess === "function") {
+                this.options.preProcess();
+            }
+
             $.ajax({
                 url: url,
                 type: "GET",
                 context: this,
                 success: onSuccess,
-                error: onError
+                error: onError,
+                complete: function() {
+                    if (this.options.onComplete && typeof this.options.onComplete === "function") {
+                        this.options.onComplete();
+                    }
+                }
             });
         },
 
         renderPreview: function(data) {
-            // console.log("SUCCESS");
-            // console.log(data);
-            
             // html to lower case
             data = data.replace(/<\/?[A-Z]+[\w\W]*?>/g, function (m) {
                 return m.toLowerCase();
@@ -142,15 +161,21 @@
             this.$previewContainer
                 .append($spanLeft)
                 .append($spanRight);
+
+            if (this.options.onSuccess && typeof this.options.onSuccess === "function") {
+                this.options.onSuccess(data);
+            }
         },
 
-        renderError: function(data) {
-            // console.log("ERROR");
-            // console.log(data);
+        renderError: function() {
             var $alert = $("<div></div>")
                             .addClass("alert alert-error")
                             .text("We are sorry we couldn't load the preview. The URL is invalid.");
             this.$previewContainer.append($alert);
+
+            if (this.options.onError && typeof this.options.onError === "function") {
+                this.options.onError();
+            }
         },
 
         findTitleInDom: function($dom) {
