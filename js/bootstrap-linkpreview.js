@@ -41,29 +41,7 @@
 (function($) {
     
     var LinkPreview = function(element, options) {
-
-        this.$element = $(element);
-        this.options = options;
-
-        if (!this.$element) {
-            return;
-        }
-        
-        this.initPreviewContainer();
-        this.initUrlValue();
-
-        if (options && options.refreshButton) {
-            this.$refreshButton = $(options.refreshButton);
-
-            var that = this;
-            this.$refreshButton.on("click", function() {
-                that.emptyPreviewContainer();
-                that.initUrlValue();
-                that.getSource(that.url, that.renderPreview, that.renderError);
-            });
-        }
-
-        this.init();
+        this.init(element, options);
     };
     
     LinkPreview.prototype = {
@@ -76,7 +54,29 @@
         $previewContainer: null,
         $refreshButton: null,
 
-        init: function() {
+        init: function(element, options) {
+
+            this.$element = $(element);
+            this.options = options;
+
+            if (!this.$element) {
+                return;
+            }
+            
+            this.initPreviewContainer();
+            this.initUrlValue();
+
+            if (options && options.refreshButton) {
+                this.$refreshButton = $(options.refreshButton);
+
+                var that = this;
+                this.$refreshButton.on("click", function() {
+                    that.emptyPreviewContainer();
+                    that.initUrlValue();
+                    that.getSource(that.url, that.renderPreview, that.renderError);
+                });
+            }
+
             this.getSource(this.url, this.renderPreview, this.renderError);
         },
 
@@ -153,7 +153,7 @@
             }
 
             that.emptyPreviewContainer();
-            
+
             // html to lower case
             data = data.replace(/<\/?[A-Z]+[\w\W]*?>/g, function (m) {
                 return m.toLowerCase();
@@ -272,6 +272,11 @@
             var $this = $(this),
                 data = $this.data('linkpreview'),
                 options = typeof option === 'object' && option;
+
+            if (option instanceof LinkPreview) {
+                $this.data('linkpreview', (data = option));
+                data.init(this, data.options);
+            }
             if (!data) {
                 $this.data('linkpreview', (data = new LinkPreview(this, $.extend({}, $.fn.linkpreview.defaults, options))));
             }
