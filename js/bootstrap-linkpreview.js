@@ -6,6 +6,7 @@
  * $("#link").linkpreview({
  *     url: "http://romainpiel.com",            //optional
  *     previewContainer: "#preview-container",  //optional
+ *     previewContainerClass: "row-fluid",
  *     refreshButton: "#refresh-button",        //optional
  *     preProcess: function() {                 //optional
  *         console.log("preProcess");
@@ -86,7 +87,13 @@
                 this.$previewContainer = this.$element.parent();
             }
 
-            this.$previewContainer.addClass("link-preview well row-fluid");
+            this.$previewContainer.addClass("link-preview");
+
+            if (this.options && this.options.previewContainerClass) {
+                this.$previewContainer.addClass(this.options.previewContainerClass);
+            } else {
+                this.$previewContainer.addClass("well row-fluid");
+            }
         },
 
         initUrlValue: function() {

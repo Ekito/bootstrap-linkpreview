@@ -5,6 +5,7 @@ $(function() {
     $("input").linkpreview({
         previewContainer: "#preview-container2",
         refreshButton: "#refresh-button",
+        previewContainerClass: "row-fluid",
         preProcess: function() {
             console.log("preProcess");
         },
