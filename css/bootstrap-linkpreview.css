@@ -1,0 +1,7 @@
+.link-preview {
+  margin-top: 20px;
+}
+.link-preview img {
+  height: 100px;
+  max-width: 150px;
+}

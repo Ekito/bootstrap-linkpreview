@@ -4,20 +4,23 @@
         <title>Chrome Link Preview - Demo</title>
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="/css/responsive.css">
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap-linkpreview.css">
     </head>
     <body>
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <a href="http://romainpiel.com">http://romainpiel.com</a>
-            </div>
-            <div id="preview-container" class="row-fluid">
-            </div>
-            <div class="row-fluid input-append">
-                <input type="text" value="http://liberation.fr"></input>
-                <button id="refresh-button" class="btn" type="button">Preview</button>
-            </div>
-            <div id="preview-container2" class="row-fluid">
+        <div id="wrapper">
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <h3>Anchors</h3>
+                    <a href="http://www.scoop.it/t/next-web-app">http://www.scoop.it/t/next-web-app</a>
+                </div>
+                <div id="preview-container"></div>
+                <div class="row-fluid input-append">
+                    <h3>Inputs</h3>
+                    <input type="text" value="http://liberation.fr"></input>
+                    <button id="refresh-button" class="btn" type="button">Preview</button>
+                </div>
+                <div id="preview-container2"></div>
             </div>
         </div>
 

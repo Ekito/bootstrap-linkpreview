@@ -45,6 +45,8 @@
             } else {
                 this.$previewContainer = this.$element.parent();
             }
+
+            this.$previewContainer.addClass("link-preview well row-fluid");
         },
 
         initUrlValue: function() {
@@ -101,11 +103,18 @@
                 $description = $("<p></p>").text(description),
                 $image = $("<img></img>").attr("src", image);
 
+            var $spanLeft = $("<div></div>").addClass("span4"),
+                $spanRight = $("<div></div>").addClass("span8");
+
             // append information
-            this.$previewContainer
-                .append($title)
-                .append($description)
+            $spanLeft
                 .append($image);
+            $spanRight
+                .append($title)
+                .append($description);
+            this.$previewContainer
+                .append($spanLeft)
+                .append($spanRight);
         },
 
         renderError: function(data) {
