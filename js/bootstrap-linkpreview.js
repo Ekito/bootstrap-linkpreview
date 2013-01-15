@@ -81,7 +81,7 @@
         },
 
         initPreviewContainer: function() {
-            if (this.options && this.options.previewContainer) {
+            if (this.getOption("previewContainer")) {
                 this.$previewContainer = $(this.options.previewContainer);
             } else {
                 this.$previewContainer = this.$element.parent();
@@ -89,7 +89,7 @@
 
             this.$previewContainer.addClass("link-preview");
 
-            if (this.options && this.options.previewContainerClass) {
+            if (this.getOption("previewContainerClass")) {
                 this.$previewContainer.addClass(this.options.previewContainerClass);
             } else {
                 this.$previewContainer.addClass("well row-fluid");
@@ -97,7 +97,7 @@
         },
 
         initUrlValue: function() {
-            if (this.options && this.options.url) {
+            if (this.getOption("url")) {
                 this.url = this.options.url;
             } else {
                 this.url =
@@ -117,7 +117,7 @@
                 return;
             }
 
-            if (this.options.preProcess && typeof this.options.preProcess === "function") {
+            if (typeof this.getOption("preProcess") === "function") {
                 this.options.preProcess();
             }
 
@@ -128,7 +128,7 @@
                 success: onSuccess,
                 error: onError,
                 complete: function() {
-                    if (this.options.onComplete && typeof this.options.onComplete === "function") {
+                    if (typeof this.getOption("onComplete") === "function") {
                         this.options.onComplete();
                     }
                 }
@@ -169,7 +169,7 @@
                 .append($spanLeft)
                 .append($spanRight);
 
-            if (this.options.onSuccess && typeof this.options.onSuccess === "function") {
+            if (typeof this.getOption("onSuccess") === "function") {
                 this.options.onSuccess(data);
             }
         },
@@ -180,7 +180,7 @@
                             .text("We are sorry we couldn't load the preview. The URL is invalid.");
             this.$previewContainer.append($alert);
 
-            if (this.options.onError && typeof this.options.onError === "function") {
+            if (typeof this.getOption("onError") === "function") {
                 this.options.onError();
             }
         },
@@ -228,6 +228,14 @@
             });
 
             return result;
+        },
+
+        getOption: function(name) {
+            if (this.options && this.options[name]) {
+                return this.options[name];
+            } else {
+                return null;
+            }
         },
 
         validateUrl: function(value) {
