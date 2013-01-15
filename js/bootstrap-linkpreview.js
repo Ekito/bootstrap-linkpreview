@@ -3,14 +3,25 @@
     var LinkPreview = function(element, options) {
 
         this.$element = $(element);
-        
-        if (options && options.previewContainer) {
-            this.$previewContainer = $(options.previewContainer);
-        } else {
-            this.$previewContainer = this.$element.parent();
-        }
+        this.options = options;
 
-        this.url = options.url;
+        if (!this.$element) {
+            return;
+        }
+        
+        this.initPreviewContainer();
+        this.initUrlValue();
+
+        if (options && options.refreshButton) {
+            this.$refreshButton = $(options.refreshButton);
+
+            var that = this;
+            this.$refreshButton.on("click", function() {
+                that.emptyPreviewContainer();
+                that.initUrlValue();
+                that.getSource(that.url, that.renderPreview, that.renderError);
+            });
+        }
 
         this.init();
     };
@@ -22,12 +33,41 @@
 
         $element: null,
         $previewContainer: null,
+        $refreshButton: null,
 
         init: function() {
             this.getSource(this.url, this.renderPreview, this.renderError);
         },
 
+        initPreviewContainer: function() {
+            if (this.options && this.options.previewContainer) {
+                this.$previewContainer = $(this.options.previewContainer);
+            } else {
+                this.$previewContainer = this.$element.parent();
+            }
+        },
+
+        initUrlValue: function() {
+            if (this.options && this.options.url) {
+                this.url = this.options.url;
+            } else {
+                this.url =
+                    this.$element.attr("href") ||
+                    this.$element.text() ||
+                    this.$element.val();
+            }
+        },
+
+        emptyPreviewContainer: function() {
+            this.$previewContainer.empty();
+        },
+
         getSource: function(url, onSuccess, onError) {
+
+            if (!this.validateUrl(this.url)) {
+                return;
+            }
+
             $.ajax({
                 url: url,
                 type: "GET",
@@ -92,7 +132,7 @@
             if (imageSrc && !this.validateUrl(imageSrc)) {
 
                 var a = document.createElement("a");
-                a.href = this.url
+                a.href = this.url;
 
                 imageSrc = a.protocol + "//" + a.hostname + imageSrc;
             }
@@ -108,7 +148,8 @@
             var $img;
             $images.each(function() {
                 $img = $(this);
-                if ($img.attr("height") && $img.attr("width")) {
+                if ($img.attr("height") && $img.attr("height") > 40 &&
+                    $img.attr("width") && $img.attr("width") > 40) {
                     result = this.src;
                     return false;
                 }

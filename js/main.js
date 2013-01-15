@@ -1,6 +1,9 @@
 $(function() {
     $("a").linkpreview({
-        url: "http://romainpiel.com",
         previewContainer: "#preview-container"
+    });
+    $("input").linkpreview({
+        previewContainer: "#preview-container2",
+        refreshButton: "#refresh-button"
     });
 });
