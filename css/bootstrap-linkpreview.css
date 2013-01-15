@@ -1,9 +1,9 @@
-.link-preview {
-  margin-top: 20px;
-}
 .link-preview img {
-  max-height: 100px;
-  max-width: 150px;
+  max-height: 120px;
+  max-width: 100%;
+}
+.link-preview h4 {
+  margin-top: 0;
 }
 .link-preview .alert {
   margin-bottom: 0;

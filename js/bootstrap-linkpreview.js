@@ -121,23 +121,39 @@
                 this.options.preProcess();
             }
 
+            var that = this;
             $.ajax({
                 url: url,
                 type: "GET",
-                context: this,
-                success: onSuccess,
-                error: onError,
+                success: function(data) {
+                    onSuccess(this.url, data, that);
+                    if (typeof that.getOption("onSuccess") === "function") {
+                        that.options.onSuccess(data);
+                    }
+                },
+                error: function() {
+                    onError(that);
+                    if (typeof that.getOption("onError") === "function") {
+                        that.options.onError();
+                    }
+                },
                 complete: function() {
-                    if (typeof this.getOption("onComplete") === "function") {
-                        this.options.onComplete();
+                    if (typeof that.getOption("onComplete") === "function") {
+                        that.options.onComplete();
                     }
                 }
             });
         },
 
-        renderPreview: function(data) {
-            this.emptyPreviewContainer();
+        renderPreview: function(url, data, that) {
+            
+            // old request
+            if (that.url !== url) {
+                return;
+            }
 
+            that.emptyPreviewContainer();
+            
             // html to lower case
             data = data.replace(/<\/?[A-Z]+[\w\W]*?>/g, function (m) {
                 return m.toLowerCase();
@@ -149,9 +165,9 @@
             var $dom = $(dom);
             
             // get components
-            var title = this.findTitleInDom($dom),
-                description = this.findDescriptionInDom($dom),
-                image = this.findImageInDom($dom);
+            var title = that.findTitleInDom($dom),
+                description = that.findDescriptionInDom($dom),
+                image = that.findImageInDom($dom);
 
             // build dom elements
             var $title = $("<h4></h4>").text(title),
@@ -167,32 +183,30 @@
             $spanRight
                 .append($title)
                 .append($description);
-            this.$previewContainer
+            that.$previewContainer
                 .append($spanLeft)
                 .append($spanRight);
-
-            if (typeof this.getOption("onSuccess") === "function") {
-                this.options.onSuccess(data);
-            }
         },
 
-        renderError: function() {
-            this.emptyPreviewContainer();
+        renderError: function(that) {
+
+            // old request
+            if (that.url !== url) {
+                return;
+            }
+
+            that.emptyPreviewContainer();
 
             var $alert = $("<div></div>")
                 .addClass("alert alert-error");
 
-            if (this.getOption("errorMessage")) {
-                $alert.text(this.options.errorMessage);
+            if (that.getOption("errorMessage")) {
+                $alert.text(that.options.errorMessage);
             } else {
                 $alert.text("We are sorry we couldn't load the preview. The URL is invalid.");
             }
                             
-            this.$previewContainer.append($alert);
-
-            if (typeof this.getOption("onError") === "function") {
-                this.options.onError();
-            }
+            that.$previewContainer.append($alert);
         },
 
         findTitleInDom: function($dom) {
