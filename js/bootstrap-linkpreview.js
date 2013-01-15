@@ -170,7 +170,7 @@
                 image = that.findImageInDom($dom);
 
             // build dom elements
-            var $title = $("<h4></h4>").text(title),
+            var $title = $("<a></a>").attr("href", url).text(title),
                 $description = $("<p></p>").text(description);
 
             var $spanRight;
