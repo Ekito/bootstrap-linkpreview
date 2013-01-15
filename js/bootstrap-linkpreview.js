@@ -171,20 +171,25 @@
 
             // build dom elements
             var $title = $("<h4></h4>").text(title),
-                $description = $("<p></p>").text(description),
-                $image = $("<img></img>").attr("src", image);
+                $description = $("<p></p>").text(description);
 
-            var $spanLeft = $("<div></div>").addClass("span4"),
+            var $spanRight;
+            if (image) {
+                var $image = $("<img></img>").attr("src", image),
+                    $spanLeft = $("<div></div>").addClass("span4");
                 $spanRight = $("<div></div>").addClass("span8");
+                $spanLeft
+                    .append($image);
+                that.$previewContainer
+                    .append($spanLeft)
+            } else {
+                $spanRight = $("<div></div>");
+            }
 
-            // append information
-            $spanLeft
-                .append($image);
             $spanRight
                 .append($title)
                 .append($description);
             that.$previewContainer
-                .append($spanLeft)
                 .append($spanRight);
         },
 
