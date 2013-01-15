@@ -136,6 +136,8 @@
         },
 
         renderPreview: function(data) {
+            that.emptyPreviewContainer();
+
             // html to lower case
             data = data.replace(/<\/?[A-Z]+[\w\W]*?>/g, function (m) {
                 return m.toLowerCase();
@@ -175,8 +177,10 @@
         },
 
         renderError: function() {
+            that.emptyPreviewContainer();
+
             var $alert = $("<div></div>")
-                            .addClass("alert alert-error");
+                .addClass("alert alert-error");
 
             if (this.getOption("errorMessage")) {
                 $alert.text(this.options.errorMessage);
