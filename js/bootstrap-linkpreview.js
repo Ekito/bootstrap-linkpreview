@@ -80,8 +80,8 @@
         },
 
         renderPreview: function(data) {
-            //console.log("SUCCESS");
-            console.log(data);
+            // console.log("SUCCESS");
+            // console.log(data);
             
             // html to lower case
             data = data.replace(/<\/?[A-Z]+[\w\W]*?>/g, function (m) {
@@ -118,8 +118,12 @@
         },
 
         renderError: function(data) {
-            console.log("ERROR");
-            console.log(data);
+            // console.log("ERROR");
+            // console.log(data);
+            var $alert = $("<div></div>")
+                            .addClass("alert alert-error")
+                            .text("We are sorry we couldn't load the preview. The URL is invalid.");
+            this.$previewContainer.append($alert);
         },
 
         findTitleInDom: function($dom) {
