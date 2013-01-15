@@ -1,6 +1,14 @@
 /* =========================================================
- * bootstrap-linkpreview.js 
+ * bootstrap-linkpreview.js
  * http://www.github.com/ekito/bootstrap-linkpreview
+ *
+ * Use:
+ * $("#link").linkpreview({
+ *     url: "http://romainpiel.com",            //optional
+ *     previewContainer: "#preview-container",  //optional
+ *     refreshButton: "#refresh-button"         //optional
+ * });
+ *
  * =========================================================
  * Copyright 2013 ekito - http://ekito.fr
  *
