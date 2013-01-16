@@ -125,7 +125,7 @@
             $.ajax({
                 url: url,
                 type: "GET",
-                success: function(data) {
+                success: function(data) { console.log("success");
                     onSuccess(this.url, data, that);
                     if (typeof that.getOption("onSuccess") === "function") {
                         that.options.onSuccess(data);
