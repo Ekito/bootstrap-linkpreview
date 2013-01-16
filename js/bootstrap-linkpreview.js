@@ -132,7 +132,7 @@
                     }
                 },
                 error: function() {
-                    onError(that);
+                    onError(this.url, that);
                     if (typeof that.getOption("onError") === "function") {
                         that.options.onError();
                     }
@@ -181,7 +181,7 @@
                 $spanLeft
                     .append($image);
                 that.$previewContainer
-                    .append($spanLeft)
+                    .append($spanLeft);
             } else {
                 $spanRight = $("<div></div>");
             }
@@ -193,7 +193,7 @@
                 .append($spanRight);
         },
 
-        renderError: function(that) {
+        renderError: function(url, that) {
 
             // old request
             if (that.url !== url) {
