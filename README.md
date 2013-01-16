@@ -75,6 +75,12 @@ $('.element') can point to `<input>`, `<textarea>` or `<a>`. Without any paramet
     <td>Button refreshing the preview</td>
   </tr>
   <tr>
+    <th>errorMessage</th>
+    <td>String</td>
+    <td>We are sorry we couldn't load the preview. The URL is invalid.</td>
+    <td>Custom error message</td>
+  </tr>
+  <tr>
     <th>preProcess</th>
     <td>Function</td>
     <td></td>
