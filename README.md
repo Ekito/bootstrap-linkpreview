@@ -35,7 +35,7 @@ Call the library via javascript:
 
 ```javascript
 $('.element').linkpreview()
-``
+```
 
 $('.element') can point to `<input>`, `<textarea>` or `<a>`. Without any parameters, this will load the URL(s) and generate the preview just after the element(s).
 
