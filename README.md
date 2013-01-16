@@ -33,7 +33,7 @@ The advantage with Google Chrome extensions is that it gives a way to bypass the
 
 Call the library via javascript:
 
-``Javascript
+```javascript
 $('.element').linkpreview()
 ``
 
