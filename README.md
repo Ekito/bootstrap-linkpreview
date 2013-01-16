@@ -2,6 +2,8 @@
 
 A simple link preview js library using Twitter Bootstrap styling components.
 
+[Demo](http://romainpiel.com/linkpreview/)
+
 ## What does it do?
 
 bootstrap-linkpreview.js is a JavaScript library offering a facebook-like preview for URLs. It's very simple to use and it's just a few Ko.
