@@ -8,7 +8,7 @@ A simple link preview js library using Twitter Bootstrap styling components.
 
 bootstrap-linkpreview.js is a JavaScript library offering a facebook-like preview for URLs. It's very simple to use and it's just a few Ko.
 
-Usually you would like to process that kind of things on a server but sometimes you can have no other way than doing it locally. The main issue with local ajax calls is that it will return the exception:
+Usually you would like to process that kind of things on a server but sometimes you have no other way than doing it locally. The main issue with local ajax calls is that it will return the exception:
 
 ``
 XMLHttpRequest cannot load *…* Origin : * is not allowed by Access-Control-Allow-Origin.
@@ -42,6 +42,18 @@ $('.element').linkpreview()
 $('.element') can point to `<input>`, `<textarea>` or `<a>`. Without any parameters, this will load the URL(s) and generate the preview just after the element(s).
 
 ### Options
+
+There are a few options available for this library, e.g:
+
+```javascript
+$('.element').linkpreview({
+			previewContainer: "#preview-container",
+			refreshButton: "#refresh-button",
+      onSuccess: function(data) {
+					console.log("Winner!");
+      }
+})
+```
 
 <table>
   <tr>
