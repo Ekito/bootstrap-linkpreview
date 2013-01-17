@@ -47,11 +47,11 @@ There are a few options available for this library, e.g:
 
 ```javascript
 $('.element').linkpreview({
-			previewContainer: "#preview-container",
-			refreshButton: "#refresh-button",
-      onSuccess: function(data) {
-					console.log("Winner!");
-      }
+	previewContainer: "#preview-container",
+	refreshButton: "#refresh-button",
+	onSuccess: function(data) {
+		console.log("Winner!");
+	}
 })
 ```
 
