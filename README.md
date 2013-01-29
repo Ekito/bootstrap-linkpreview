@@ -1,24 +1,24 @@
 # Link preview plugin for Twitter Bootstrap
 
-A simple link preview js library using Twitter Bootstrap styling components.
+bootstrap-linkpreview.js is a JavaScript library offering a facebook-like preview for URLs. It is very simple to use and weighs just a few kilobytes.
 
 [Demo](http://romainpiel.com/linkpreview/)
 
-## What does it do?
+## One limitation: the same origin policy
 
-bootstrap-linkpreview.js is a JavaScript library offering a facebook-like preview for URLs. It's very simple to use and it's just a few Ko.
-
-Usually you would like to process that kind of things on a server but sometimes you have no other way than doing it locally. The main issue with local ajax calls is that it will return the exception:
+You may want to try this library locally from a HTML file but you will face this issue:
 
 ``
 XMLHttpRequest cannot load *…* Origin : * is not allowed by Access-Control-Allow-Origin.
 ``
 
-It is due to the [Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) concept.
+This is due to the [Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) concept. Ajax calls can only be achieved with a URL based on the same domain they are launched on. That’s why you usually want to process link previews on your server. But sometimes you don’t have any other way than doing it on the client’s side.
+
+Anyway don’t panic, this library is working perfectly with some conditions.
 
 ## Demos
 
-The best way to know how to use this library is to go through the examples in the folder `demos`. You have here several ways to go through the same origin policy.
+The best way to know how to use this library is to go through the examples in the folder `demos`. There you find two ways to get around the same origin policy.
 
 ### php-proxy
 
