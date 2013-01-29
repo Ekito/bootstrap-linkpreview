@@ -4,6 +4,8 @@ bootstrap-linkpreview.js is a JavaScript library offering a facebook-like previe
 
 [Demo](http://romainpiel.com/linkpreview/)
 
+![](http://www.ekito.fr/people/wp-content/uploads/2013/01/Screen-Shot-2013-01-17-at-12.13.11-PM.png)
+
 ## One limitation: the same origin policy
 
 You may want to try this library locally from a HTML file but you will face this issue:
