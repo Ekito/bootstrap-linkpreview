@@ -215,18 +215,21 @@
         },
 
         findTitleInDom: function($dom) {
-            return $dom.find("title").text() ||
-                $dom.find("meta[name=title]").attr("content");
+            return $dom.find("meta[property='og:title']").attr("content") ||
+                   $dom.find("title").text() ||
+                   $dom.find("meta[name=title]").attr("content");
         },
 
         findDescriptionInDom: function($dom) {
-            return $dom.find("meta[name=description]").attr("content");
+            return  $dom.find("meta[property='og:description']").attr("content") ||
+                    $dom.find("meta[name=description]").attr("content") ||
+                    $dom.find("div .description").text();
         },
 
         findImageInDom: function($dom) {
-            var imageSrc = $dom.find("meta[itemprop=image]").attr("content") ||
-                $dom.find("link[rel=image_src]").attr("content") ||
+            var imageSrc = $dom.find("meta[property='og:image'").attr("content") ||
                 $dom.find("meta[itemprop=image]").attr("content") ||
+                $dom.find("link[rel=image_src]").attr("content") ||
                 this.findFirstImageInBody($dom.find("body"));
 
             // maybe the returned url is relative
