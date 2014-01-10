@@ -39,11 +39,11 @@
  * ========================================================= */
 
 (function($) {
-    
+
     var LinkPreview = function(element, options) {
         this.init(element, options);
     };
-    
+
     LinkPreview.prototype = {
         constructor: LinkPreview,
 
@@ -62,7 +62,7 @@
             if (!this.$element) {
                 return;
             }
-            
+
             this.initPreviewContainer();
             this.initUrlValue();
 
@@ -146,7 +146,7 @@
         },
 
         renderPreview: function(url, data, that) {
-            
+
             // old request
             if (that.url !== url) {
                 return;
@@ -163,23 +163,35 @@
             var dom = document.implementation.createHTMLDocument('');
             dom.body.innerHTML = data;
             var $dom = $(dom);
-            
+
             // get components
             var title = that.findTitleInDom($dom),
                 description = that.findDescriptionInDom($dom),
-                image = that.findImageInDom($dom);
+                image = that.findImageInDom($dom),
+                video = that.findVideoInDom($dom);
 
             // build dom elements
             var $title = $("<a></a>").attr("href", url).text(title),
                 $description = $("<p></p>").text(description);
 
             var $spanRight;
-            if (image) {
-                var $image = $("<img></img>").attr("src", image),
-                    $spanLeft = $("<div></div>").addClass("span4");
-                $spanRight = $("<div></div>").addClass("span8");
+
+            if(!video) {
+                if (image) {
+                    var $image = $("<img></img>").attr("src", image).attr('width', 120),
+                        $spanLeft = $("<div></div>").addClass("media-object pull-left");
+                    $spanRight = $("<div></div>").addClass("media-body");
+                    $spanLeft
+                        .append($image);
+                    that.$previewContainer
+                        .append($spanLeft);
+                }
+            } else if (video) {
+                var $video = $("<iframe></iframe>").attr("src", video).attr('width', 320),
+                    $spanLeft = $("<div></div>").addClass("media-object pull-left");
+                $spanRight = $("<div></div>").addClass("media-body");
                 $spanLeft
-                    .append($image);
+                    .append($video);
                 that.$previewContainer
                     .append($spanLeft);
             } else {
@@ -210,7 +222,7 @@
             } else {
                 $alert.text("We are sorry we couldn't load the preview. The URL is invalid.");
             }
-                            
+
             that.$previewContainer.append($alert);
         },
 
@@ -227,7 +239,7 @@
         },
 
         findImageInDom: function($dom) {
-            var imageSrc = $dom.find("meta[property='og:image'").attr("content") ||
+            var imageSrc = $dom.find("meta[property='og:image']").attr("content") ||
                 $dom.find("meta[itemprop=image]").attr("content") ||
                 $dom.find("link[rel=image_src]").attr("content") ||
                 this.findFirstImageInBody($dom.find("body"));
@@ -242,6 +254,20 @@
             }
 
             return imageSrc;
+        },
+
+        findVideoInDom: function($dom) {
+            var videoSrc = $dom.find("meta[property='og:video']").attr("content");
+
+            if (videoSrc && !this.validateUrl(videoSrc)) {
+
+                var a = document.createElement("a");
+                a.href = this.url;
+
+                videoSrc = a.protocol + "//" + a.hostname + videoSrc;
+            }
+
+            return videoSrc;
         },
 
         findFirstImageInBody: function($body) {
@@ -295,7 +321,7 @@
     };
 
     $.fn.linkpreview.defaults = {};
-    
+
     $.fn.linkpreview.Constructor = LinkPreview;
 
 })(window.jQuery);
