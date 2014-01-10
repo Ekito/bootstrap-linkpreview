@@ -185,17 +185,17 @@
                         .append($image);
                     that.$previewContainer
                         .append($spanLeft);
+                } else {
+                    $spanRight = $("<div></div>");
                 }
             } else if (video) {
                 var $video = $("<iframe></iframe>").attr("src", video).attr('width', 320),
-                    $spanLeft = $("<div></div>").addClass("media-object pull-left");
+                             $spanLeft = $("<div></div>").addClass("media-object pull-left");
                 $spanRight = $("<div></div>").addClass("media-body");
                 $spanLeft
                     .append($video);
                 that.$previewContainer
                     .append($spanLeft);
-            } else {
-                $spanRight = $("<div></div>");
             }
 
             $spanRight
