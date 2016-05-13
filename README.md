@@ -92,7 +92,7 @@ $('.element').linkpreview({
    <tr>
     <th>autoRefresh</th>
     <td>Selector</td>
-    <td></td>
+    <td>Null | False</td>
     <td>If true refreshes the previewContainerClass on keyup event</td>
   </tr>
   <tr>
