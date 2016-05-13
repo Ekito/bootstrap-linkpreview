@@ -38,6 +38,46 @@
  * limitations under the License.
  * ========================================================= */
 
+
+  /* AUTO LINKING */
+(function() {
+  var autoLink,
+    __slice = [].slice;
+
+  autoLink = function() {
+    var k, linkAttributes, option, options, pattern, v;
+    options = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+
+    pattern = /(^|[\s\n]|<br\/?>)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;
+    if (!(options.length > 0)) {
+      return this.replace(pattern, "$2");
+    }
+    option = options[0];
+    linkAttributes = ((function() {
+      var _results;
+      _results = [];
+      for (k in option) {
+        v = option[k];
+        if (k !== 'callback') {
+          _results.push(" " + k + "='" + v + "'");
+        }
+      }
+      return _results;
+    })()).join('');
+    return this.replace(pattern, function(match, space, url) {
+      var link;
+      link = (typeof option.callback === "function" ? option.callback(url) : void 0) || (url);
+      return "" + space + link;
+    });
+  };
+
+  String.prototype['autoLink'] = autoLink;
+
+}).call(this);
+
+
+
+
 (function($) {
     
     var LinkPreview = function(element, options) {
@@ -53,6 +93,7 @@
         $element: null,
         $previewContainer: null,
         $refreshButton: null,
+        $autoRefresh: null,
 
         init: function(element, options) {
 
@@ -74,6 +115,18 @@
                     that.emptyPreviewContainer();
                     that.initUrlValue();
                     that.getSource(that.url, that.renderPreview, that.renderError);
+                });
+            }
+
+
+            if (options && options.autoRefresh) {
+                this.$autoRefresh = $(options.autoRefresh);
+
+                var that = this;
+                this.$element.keyup(function(event) {
+                    that.emptyPreviewContainer();
+                    that.initUrlValue();
+                    that.getSource(that.url.autoLink().trim(), that.renderPreview, that.renderError);
                 });
             }
 
