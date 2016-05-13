@@ -41,41 +41,15 @@
 
   /* AUTO LINKING */
 (function() {
-  var autoLink,
-    __slice = [].slice;
+    var autoLink = function() {
+        var pattern = /(^|[\s\n]|<br\/?>)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;
 
-  autoLink = function() {
-    var k, linkAttributes, option, options, pattern, v;
-    options = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-
-    pattern = /(^|[\s\n]|<br\/?>)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;
-    if (!(options.length > 0)) {
-      return this.replace(pattern, "$2");
-    }
-    option = options[0];
-    linkAttributes = ((function() {
-      var _results;
-      _results = [];
-      for (k in option) {
-        v = option[k];
-        if (k !== 'callback') {
-          _results.push(" " + k + "='" + v + "'");
-        }
-      }
-      return _results;
-    })()).join('');
-    return this.replace(pattern, function(match, space, url) {
-      var link;
-      link = (typeof option.callback === "function" ? option.callback(url) : void 0) || (url);
-      return "" + space + link;
-    });
-  };
+        return this.match(pattern)[0].trim();
+    };
 
   String.prototype['autoLink'] = autoLink;
 
 }).call(this);
-
-
 
 
 (function($) {
@@ -126,7 +100,8 @@
                 this.$element.keyup(function(event) {
                     that.emptyPreviewContainer();
                     that.initUrlValue();
-                    that.getSource(that.url.autoLink().trim(), that.renderPreview, that.renderError);
+                    var urli = that.url.autoLink();
+                    that.getSource(String(urli), that.renderPreview, that.renderError);
                 });
             }
 
@@ -201,7 +176,7 @@
         renderPreview: function(url, data, that) {
             
             // old request
-            if (that.url !== url) {
+            if (that.url.autoLink() !== url.autoLink()) {
                 return;
             }
 
@@ -324,6 +299,7 @@
         },
 
         validateUrl: function(value) {
+            value = value.autoLink().trim();
             return (/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i).test(value);
         }
     };
