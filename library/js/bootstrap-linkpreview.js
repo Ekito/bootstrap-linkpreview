@@ -227,7 +227,7 @@
         },
 
         findImageInDom: function($dom) {
-            var imageSrc = $dom.find("meta[property='og:image'").attr("content") ||
+            var imageSrc = $dom.find("meta[property='og:image']").attr("content") ||
                 $dom.find("meta[itemprop=image]").attr("content") ||
                 $dom.find("link[rel=image_src]").attr("content") ||
                 this.findFirstImageInBody($dom.find("body"));
