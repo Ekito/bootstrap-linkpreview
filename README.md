@@ -27,6 +27,7 @@ The best way to know how to use this library is to go through the examples in th
 This example demonstrates how to use the library from a website. It simply filters every jQuery ajax calls and echoes it on the server. That way the ajax call get the results back. To run the code, simply upload the demo on your server or run a local Apache server.
 
 Thanks to [this thread](http://stackoverflow.com/a/12683591/334209) for the php script.
+Also "bryanwoods/autolink-js" for the regex for matching urls.
 
 ### chrome-extension
 
@@ -41,7 +42,7 @@ Call the library via javascript:
 $('.element').linkpreview()
 ```
 
-$('.element') can point to `<input>`, `<textarea>` or `<a>`. Without any parameters, this will load the URL(s) and generate the preview just after the element(s).
+$('.element') can point to `<input>`, `<textarea>` or `<a>`. Without any parameters, this will detect url's on each keyup and will load the URL(s) and generate the preview just after the element(s).
 
 ### Options
 
@@ -87,6 +88,12 @@ $('.element').linkpreview({
     <td>Selector</td>
     <td></td>
     <td>Button refreshing the preview</td>
+  </tr>
+   <tr>
+    <th>autoRefresh</th>
+    <td>(true, false)</td>
+    <td>Null | False</td>
+    <td>When set to `true` refreshes the previewContainerClass on keyup event</td>
   </tr>
   <tr>
     <th>errorMessage</th>

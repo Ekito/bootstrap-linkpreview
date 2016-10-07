@@ -38,6 +38,20 @@
  * limitations under the License.
  * ========================================================= */
 
+
+  /* AUTO LINKING */
+(function() {
+    var autoLink = function() {
+        var pattern = /(^|[\s\n]|<br\/?>)((?:https?|ftp):\/\/[\-A-Z0-9+\u0026\u2019@#\/%?=()~_|!:,.;]*[\-A-Z0-9+\u0026@#\/%=~()_|])/gi;
+
+        return this.match(pattern)[0].trim();
+    };
+
+  String.prototype['autoLink'] = autoLink;
+
+}).call(this);
+
+
 (function($) {
     
     var LinkPreview = function(element, options) {
@@ -53,6 +67,7 @@
         $element: null,
         $previewContainer: null,
         $refreshButton: null,
+        $autoRefresh: null,
 
         init: function(element, options) {
 
@@ -74,6 +89,19 @@
                     that.emptyPreviewContainer();
                     that.initUrlValue();
                     that.getSource(that.url, that.renderPreview, that.renderError);
+                });
+            }
+
+
+            if (options && options.autoRefresh) {
+                this.$autoRefresh = $(options.autoRefresh);
+
+                var that = this;
+                this.$element.keyup(function(event) {
+                    that.emptyPreviewContainer();
+                    that.initUrlValue();
+                    var urli = that.url.autoLink();
+                    that.getSource(String(urli), that.renderPreview, that.renderError);
                 });
             }
 
@@ -148,7 +176,7 @@
         renderPreview: function(url, data, that) {
             
             // old request
-            if (that.url !== url) {
+            if (that.url.autoLink() !== url.autoLink()) {
                 return;
             }
 
@@ -271,6 +299,7 @@
         },
 
         validateUrl: function(value) {
+            value = value.autoLink().trim();
             return (/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i).test(value);
         }
     };
